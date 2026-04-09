@@ -23,27 +23,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-jd693la(u*!uwrlnhk^$^^o*vaii0a78%k@yq81g9es-b6voqz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
 
 
-# ALLOWED_HOSTS = [
-#     "web-production-ffb34.up.railway.app",
-#     "127.0.0.1",
-#     "localhost",
-#     "www.rovanatrade.com",
-#     "rovanatrade.com",
-# ]
-# CSRF_TRUSTED_ORIGINS = [
-#     # "https://fiber-production-0802.up.railway.app",
-#     "http://127.0.0.1:8000",
-#     "http://localhost:8000",
-#     "https://web-production-ffb34.up.railway.app",
-#     "https://www.rovanatrade.com",
-#     "https://rovanatrade.com",
+ALLOWED_HOSTS = [
+    "oilcompany.up.railway.app",
+    "127.0.0.1",
+    "localhost",
+    
+]
+CSRF_TRUSTED_ORIGINS = [
+    "https://oilcompany.up.railway.app",
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
+  
 
-# ]
+]
 
 # Application definition
 
