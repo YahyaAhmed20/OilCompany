@@ -23,8 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-jd693la(u*!uwrlnhk^$^^o*vaii0a78%k@yq81g9es-b6voqz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = False
+DEBUG = True
+# DEBUG = False
 
 
 
@@ -152,3 +152,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# إخفاء الروابط الافتراضية (Gitee / Github)
+SIMPLEUI_HOME_INFO = False
+
+# إزالة روابط الـ quick actions بالكامل

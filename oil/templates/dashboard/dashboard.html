@@ -388,7 +388,7 @@
                 لوحة التحكم
             </a>
         </div>
-        <div class="brand-sub">نظام إدارة الحسابات المتكامل</div>
+        <div class="brand-sub"> نظام اداره الزيوت</div>
     </div>
 </div>
         <div class="header-meta">
@@ -491,37 +491,72 @@
         <div class="table-card">
             <div class="table-head">
                 <div class="table-title">🏭 آخر عمليات الموردين</div>
-                <a href="#" class="view-all">عرض الكل ←</a>
+            <a href="{% url 'admin:oil_suppliertransaction_changelist' %}" class="view-all">
+    عرض الكل ←
+</a>
             </div>
             <table class="tbl">
-                <thead>
-                    <tr>
-                        <th>المورد</th>
-                        <th>التاريخ</th>
-                        <th>النوع</th>
-                        <th>الكمية</th>
-                        <th>الرصيد</th>
-                    </tr>
-                </thead>
+               <thead>
+    <tr>
+        <th>المورد</th>
+        <th>التاريخ</th>
+        <th>النوع</th>
+        <th>الحمولة</th>
+        <th>نوع الزيت</th>
+        <th>إجمالي الشراء</th>
+        <th>إجمالي البيع</th>
+        <th>الحالة</th>
+    </tr>
+</thead>
                 <tbody>
-                    {% for t in latest_supplier_tx %}
-                    <tr>
-                        <td>{{ t.supplier.name }}</td>
-                        <td>{{ t.date }}</td>
-                        <td><span class="tx-type tx-buy">{{ t.get_transaction_type_display }}</span></td>
-                        <td>{{ t.quantity }}</td>
-                        <td class="bal-negative">{{ t.balance }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    {% for t in latest_supplier_tx %}
+    <tr>
+        <td>{{ t.supplier.name }}</td>
+        <td>{{ t.date }}</td>
+
+        <td>
+            <span class="tx-type {% if t.transaction_type == 'purchase' %}tx-buy{% else %}tx-sale{% endif %}">
+                {{ t.get_transaction_type_display }}
+            </span>
+        </td>
+
+        <td>{{ t.quantity }}</td>
+
+        <td>
+            {% if t.oil_type %}
+                {{ t.get_oil_type_display }}
+            {% else %}
+                -
+            {% endif %}
+        </td>
+
+        <td>{{ t.total_purchase }}</td>
+        <td>{{ t.total_sale }}</td>
+
+        <td>
+            <span class="
+                {% if t.status == 'علينا' %}bal-negative
+                {% elif t.status == 'لينا' %}bal-positive
+                {% else %}bal-neutral
+                {% endif %}
+            ">
+                {{ t.status }}
+            </span>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>  <!-- ← دي ناقصة -->
+
         </div>
 
         <!-- Customers Table -->
         <div class="table-card">
             <div class="table-head">
                 <div class="table-title">👥 آخر عمليات العملاء</div>
-                <a href="#" class="view-all">عرض الكل ←</a>
+                <a href="{% url 'admin:oil_customertransaction_changelist' %}" class="view-all">
+    عرض الكل ←
+</a>
             </div>
             <table class="tbl">
                 <thead>
