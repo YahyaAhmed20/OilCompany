@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body { direction: rtl; }
+    </style>
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+<div class="p-6">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold">📊 لوحة التحكم</h1>
+    </div>
+
+    <!-- KPIs -->
+    <div class="grid grid-cols-4 gap-4 mb-6">
+
+        <div class="bg-white p-5 rounded-xl shadow">
+            <p class="text-gray-500">الموردين</p>
+            <h2 class="text-2xl font-bold">{{ suppliers_count }}</h2>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl shadow">
+            <p class="text-gray-500">العملاء</p>
+            <h2 class="text-2xl font-bold">{{ customers_count }}</h2>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl shadow">
+            <p class="text-gray-500">الحجوزات</p>
+            <h2 class="text-2xl font-bold">{{ total_reservations }}</h2>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl shadow">
+            <p class="text-gray-500">رصيد الحجوزات</p>
+            <h2 class="text-2xl font-bold text-blue-600">{{ total_remaining }}</h2>
+        </div>
+
+    </div>
+
+    <!-- Financial -->
+    <div class="grid grid-cols-4 gap-4 mb-6">
+
+        <div class="bg-red-50 p-5 rounded-xl shadow">
+            <p class="text-gray-500">علينا</p>
+            <h2 class="text-2xl font-bold text-red-600">{{ total_debit }}</h2>
+        </div>
+
+        <div class="bg-green-50 p-5 rounded-xl shadow">
+            <p class="text-gray-500">لينا</p>
+            <h2 class="text-2xl font-bold text-green-600">{{ total_credit }}</h2>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl shadow">
+            <p class="text-gray-500">رصيد الموردين</p>
+            <h2 class="text-2xl font-bold">{{ total_supplier_balance }}</h2>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl shadow">
+            <p class="text-gray-500">رصيد العملاء</p>
+            <h2 class="text-2xl font-bold">{{ total_customer_balance }}</h2>
+        </div>
+
+    </div>
+
+    <!-- Charts -->
+    <div class="grid grid-cols-2 gap-6 mb-6">
+
+        <div class="bg-white p-5 rounded-xl shadow">
+            <h3 class="mb-3 font-bold">المبيعات vs المشتريات</h3>
+            <canvas id="salesChart"></canvas>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl shadow">
+            <h3 class="mb-3 font-bold">الحسابات</h3>
+            <canvas id="balanceChart"></canvas>
+        </div>
+
+    </div>
+
+    <!-- Tables -->
+    <div class="grid grid-cols-2 gap-6">
+
+        <!-- الموردين -->
+        <div class="bg-white p-5 rounded-xl shadow">
+            <h3 class="mb-3 font-bold">آخر عمليات الموردين</h3>
+
+            <table class="w-full text-center border">
+                <tr class="bg-gray-800 text-white">
+                    <th>المورد</th>
+                    <th>التاريخ</th>
+                    <th>النوع</th>
+                    <th>الكمية</th>
+                    <th>الرصيد</th>
+                </tr>
+
+                {% for t in latest_supplier_tx %}
+                <tr class="border">
+                    <td>{{ t.supplier.name }}</td>
+                    <td>{{ t.date }}</td>
+                    <td>{{ t.get_transaction_type_display }}</td>
+                    <td>{{ t.quantity }}</td>
+                    <td>{{ t.balance }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <!-- العملاء -->
+        <div class="bg-white p-5 rounded-xl shadow">
+            <h3 class="mb-3 font-bold">آخر عمليات العملاء</h3>
+
+            <table class="w-full text-center border">
+                <tr class="bg-gray-800 text-white">
+                    <th>العميل</th>
+                    <th>التاريخ</th>
+                    <th>الكمية</th>
+                    <th>الرصيد</th>
+                </tr>
+
+                {% for t in latest_customer_tx %}
+                <tr class="border">
+                    <td>{{ t.customer.name }}</td>
+                    <td>{{ t.date }}</td>
+                    <td>{{ t.quantity }}</td>
+                    <td>{{ t.balance }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Charts Script -->
+<script>
+
+    // Sales Chart
+    new Chart(document.getElementById('salesChart'), {
+        type: 'bar',
+        data: {
+            labels: ['المشتريات', 'المبيعات'],
+            datasets: [{
+                label: 'القيمة',
+                data: [{{ total_debit }}, {{ total_credit }}]
+            }]
+        }
+    });
+
+    // Balance Chart
+    new Chart(document.getElementById('balanceChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['موردين', 'عملاء'],
+            datasets: [{
+                data: [{{ total_supplier_balance }}, {{ total_customer_balance }}]
+            }]
+        }
+    });
+
+</script>
+
+</body>
+</html>
